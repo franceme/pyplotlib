@@ -25,7 +25,7 @@ except:
 # region Basic Information
 here = os.path.abspath(os.path.dirname(__file__))
 py_version = sys.version_info[:2]
-NAME = "hugg"
+NAME = "pyplotlib"
 AUTHOR = 'Miles Frantz'
 EMAIL = 'frantzme@vt.edu'
 DESCRIPTION = 'My short description for my project.'
@@ -35,7 +35,7 @@ long_description = pathlib.Path(f"{here}/README.md").read_text(encoding='utf-8')
 REQUIRES_PYTHON = '>=3.8.0'
 RELEASE = "?"
 entry_point = f"src.{NAME}"
-VERSION = "0.2.56"
+VERSION = "0.0.0"
 
 def zip_program(outputName:str = f"{NAME}.zip"):
 	#http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
@@ -103,16 +103,6 @@ elif selfArg('zip'):
 # endregion
 # region Setup
 extra_requires = {
-	'splych':["splych"],
-	'ghub':["PyGithub", "requests", "gett", "mystring"],
-	"q_ghub":["PyGithub", "requests", "gett", "waybackpy", "git4net", "splittr"],
-	'glab':["python-gitlab"],
-	'zip':["ruamel.std.zipfile"],
-	'face':["huggingface_hub", "datasets"],
-	'sqlite':["mystring", "pandas"],
-	'excel':["huggingface_hub", "datasets", "openpyxl"],
-	'dbhub':["huggingface_hub", "datasets", "pydbhub"],
-	'docker':["docker", "ephfile"]
 }
 extra_requires['all'] = [value for key,values in extra_requires.items() for value in values]
 
@@ -133,8 +123,8 @@ setup(
 	entry_points={
 	},
 	install_requires=[
-		"ephfile",
-		"mystring"
+		"matplotlib",
+		"mystring",
 	],
 	extras_require = extra_requires,
 	include_package_data=True,

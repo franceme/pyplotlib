@@ -3,7 +3,7 @@ name: "GH_Pages"
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [hugg_website_build]
+    types: [pyplotlib_website_build]
 
 jobs:
   analyze:

@@ -31,6 +31,6 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
-        repository: franceme/hugg
-        event-type: hugg_website_build
+        repository: franceme/pyplotlib
+        event-type: pyplotlib_website_build
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
