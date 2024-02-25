@@ -17,6 +17,15 @@ styles = {
     "ieee_Archive":mystring.string.of("IyBNYXRwbG90bGliIHN0eWxlIGZvciBJRUVFIHBsb3RzCiMgVGhpcyBzdHlsZSBzaG91bGQgd29yayBmb3IgbW9zdCB0d28tY29sdW1uIGpvdXJuYWxzCgojIFNldCBjb2xvciBjeWNsZQojIFNldCBsaW5lIHN0eWxlIGFzIHdlbGwgZm9yIGJsYWNrIGFuZCB3aGl0ZSBncmFwaHMKYXhlcy5wcm9wX2N5Y2xlIDogKGN5Y2xlcignY29sb3InLCBbJ2snLCAncicsICdiJywgJ2cnXSkgKyBjeWNsZXIoJ2xzJywgWyctJywgJy0tJywgJzonLCAnLS4nXSkpCgojIFNldCBkZWZhdWx0IGZpZ3VyZSBzaXplCmZpZ3VyZS5maWdzaXplIDogMy4zLCAyLjUKZmlndXJlLmRwaSA6IDYwMAoKIyBGb250IHNpemVzCmZvbnQuc2l6ZSA6IDgKZm9udC5mYW1pbHkgOiBzZXJpZgpmb250LnNlcmlmIDogVGltZXM=")
 }
 
+def reset():
+    import matplotlib as mpl
+    mpl.rcParams.update(mpl.rcParamsDefault)
+    try:
+        from IPython import get_ipython
+        ipython = get_ipython()
+        ipython.magic("matplotlib inline")
+    except:pass
+
 def flatten(column_header):
     if isinstance(column_header, list) or isinstance(column_header, tuple):
         return ' '.join([str(ch) for ch in column_header]).strip()
