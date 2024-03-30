@@ -35,7 +35,7 @@ long_description = pathlib.Path(f"{here}/README.md").read_text(encoding='utf-8')
 REQUIRES_PYTHON = '>=3.8.0'
 RELEASE = "?"
 entry_point = f"src.{NAME}"
-VERSION = "0.0.5"
+VERSION = "0.0.6"
 
 def zip_program(outputName:str = f"{NAME}.zip"):
 	#http://blog.ablepear.com/2012/10/bundling-python-files-into-stand-alone.html
@@ -103,6 +103,8 @@ elif selfArg('zip'):
 # endregion
 # region Setup
 extra_requires = {
+	'mlb':["matplotlib"],
+	'plotly':["plotly"],
 }
 extra_requires['all'] = [value for key,values in extra_requires.items() for value in values]
 
@@ -123,7 +125,6 @@ setup(
 	entry_points={
 	},
 	install_requires=[
-		"matplotlib",
 		"mystring",
 	],
 	extras_require = extra_requires,
