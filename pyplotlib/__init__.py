@@ -2,8 +2,32 @@ import os,sys,mystring
 import matplotlib.pyplot as plt
 
 """
-* [LovelyPlots](https://github.com/killiansheriff/LovelyPlots)
-* [SciencePlots](https://github.com/garrettj403/SciencePlots)
+* Matplotlib
+    * [LovelyPlots](https://github.com/killiansheriff/LovelyPlots)
+    * [SciencePlots](https://github.com/garrettj403/SciencePlots)
+    * [Paper-Themes](https://github.com/Dih5/paper-themes)
+    * [ExtensysPlots](https://github.com/mcekwonu/ExtensysPlots)
+    * [tueplots](https://github.com/pnkraemer/tueplots)
+    * [sciplot](https://github.com/andreasfuhr/sciplot)
+    * https://github.com/topics/matplotlib-style-sheets?l=python
+* Plotly
+    * [plotly-scientific-plots](https://github.com/rsandler00/plotly-scientific-plots)
+* All
+    * [statworx-theme](https://github.com/STATWORX/statworx-theme)
+* General
+    * https://www.fabiocrameri.ch/colourmaps/
+    * https://hvplot.holoviz.org/
+    * https://plotnine.org/
+    * https://github.com/rougier/scientific-visualization-book
+
+
+Conversions
+* [From Matplotlib > Plotly : `python mpl_to_plotly`](https://plotly.com/python-api-reference/generated/plotly.html?highlight=tool#module-plotly.tools)
+* [From Plotly to Matplotlib]()
+
+
+https://github.com/raybuhr/pyplot-themes
+https://github.com/jbmouret/matplotlib_for_papers
 """
 
 styles = {
