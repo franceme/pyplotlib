@@ -5,12 +5,33 @@ def flatten(column_header):
         return ' '.join([str(ch) for ch in column_header]).strip()
     return column_header
 
-def reset():
-    try:
-        from IPython import get_ipython
-        ipython = get_ipython()
-        ipython.magic("matplotlib inline")
-    except:pass
+from abc import ABC, abstractmethod
+from copy import deepcopy as dc
+class styleapplicator(ABC):
+    def __init__(self):
+        super().__init__()
+    @staticmethod
+    def clr():
+        try:
+            from IPython.display import clear_output;
+            clear_output();
+        except:pass
+    def clear_screen(self):
+        styleapplicator.clr();
+    def reset(self):
+        try:
+            from IPython import get_ipython;
+            ipython = get_ipython();
+        except:pass
+    @abstractmethod
+    def __enter__(self):
+        pass
+    @abstractmethod
+    def __exit__(self,*args, **kwargs):
+        pass
+    @abstractmethod
+    def __call__(self, some_figure_obj):
+        pass
 
 try:
     import matplotlib.pyplot as plt
@@ -68,6 +89,30 @@ try:
 * https://github.com/jbmouret/matplotlib_for_papers
 * https://github.com/raybuhr/pyplot-themes
 """)
+
+    class matplotstyle(styleapplicator):
+        def __init__(self, style='ipynb'):
+            super().__init__()
+            if style in ['ipynb', 'colorsblind34']:
+                try:import lovelyplots
+                except:mystring.imp("lovelyplots");import lovelyplots
+            elif style in ['science', 'ieee']:
+                try:import scienceplots
+                except:mystring.imp("scienceplots");import scienceplots
+            self.extra_context_caller = plt.style.context(style)
+        def reset(self):
+            try:
+                from IPython import get_ipython;
+                ipython = get_ipython()
+                ipython.magic("matplotlib inline")
+            except:pass
+        def __enter__(self):
+            self.extra_context_caller.__enter__()
+            return self
+        def __exit__(self,*args, **kwargs):
+            self.extra_context_caller.__exit__()
+        def __call__(self, some_figure_obj):
+            return some_figure_obj
 except:pass
 try:
     import plotly.io as pio
@@ -134,6 +179,10 @@ try:
 
     def plt_help():
         print("""
+main inspirations
+* https://gist.github.com/Miladiouss/e2f4fef284ebf8461752a769e6ec5864
+* https://plotly.com/python/reference/layout/xaxis/#layout-xaxis-type
+              
 * https://github.com/rougier/scientific-visualization-book
 * [statworx-theme](https://github.com/STATWORX/statworx-theme)
 * [plotly-scientific-plots](https://github.com/rsandler00/plotly-scientific-plots)
@@ -143,5 +192,16 @@ try:
 > Paper - http://conference.scipy.org.s3-website-us-east-1.amazonaws.com/proceedings/scipy2019/pdfs/shammamah_hossain.pdf
 * website: https://plotly.com/python/templates/
 """)
+
+    class pltstyle(styleapplicator):
+        def __init__(self, **kwargs):
+            super().__init__()
+            self.kwargs = {key:value for key,value in kwargs.items()}
+        def __enter__(self):return self
+        def __exit__(self,*args, **kwargs):pass
+        def __call__(self, some_figure_obj):
+            some_figure_obj.update(**self.kwargs)
+            self.clear_screen()
+            return some_figure_obj
 except:pass
 
