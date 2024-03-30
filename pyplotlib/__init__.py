@@ -200,7 +200,11 @@ main inspirations
         def __enter__(self):return self
         def __exit__(self,*args, **kwargs):pass
         def __call__(self, some_figure_obj):
-            some_figure_obj.update(**self.kwargs)
+            some_figure_obj.update(
+                plt_style(
+                    **self.kwargs
+                )
+            )
             self.clear_screen()
             return some_figure_obj
 except:pass
