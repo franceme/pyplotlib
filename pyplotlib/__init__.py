@@ -12,6 +12,11 @@ import matplotlib.pyplot as plt
     * https://github.com/topics/matplotlib-style-sheets?l=python
 * Plotly
     * [plotly-scientific-plots](https://github.com/rsandler00/plotly-scientific-plots)
+    - General Page: https://plotly.com/python/scientific-charts/
+    - sample gist: https://gist.github.com/Miladiouss/e2f4fef284ebf8461752a769e6ec5864
+    + maybe using a seaborn -type theme: https://onezero.blog/generate-publication-ready-plots-using-seaborn-library-part-1/
+    > Paper - http://conference.scipy.org.s3-website-us-east-1.amazonaws.com/proceedings/scipy2019/pdfs/shammamah_hossain.pdf
+    * website: https://plotly.com/python/templates/
 * All
     * [statworx-theme](https://github.com/STATWORX/statworx-theme)
 * General
