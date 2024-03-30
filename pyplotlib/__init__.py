@@ -143,7 +143,6 @@ try:
             'layout.autosize': True,
             'layout.showlegend': True,
             'layout.legend.bgcolor': 'rgba(0, 0, 0, 0)',
-            'layout.legend.xanchor': 'right',
             'layout.legend.x': 1,
             'layout.legend.font.family': font,
             'layout.legend.font.size': font_size,
