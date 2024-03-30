@@ -158,6 +158,7 @@ try:
 
         plt_default()
         for key,value in kwargs.items():
+            key=key.replace('_','.')
             if key == 'font':
                 for font_key in font_keys:
                     style_dict[font_key] = value
