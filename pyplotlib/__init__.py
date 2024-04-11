@@ -171,6 +171,10 @@ try:
                 style_dict['layout.yaxis.title'] = value
             elif key == 'title':
                 style_dict['layout.title'] = value
+            elif key == 'title.font.family':
+                style_dict['layout.title.font.family'] = value
+            elif key == 'title.font.size':
+                style_dict['layout.title.font.size'] = value
             elif key == 'theme':
                 pio.templates.default = value
             else:
