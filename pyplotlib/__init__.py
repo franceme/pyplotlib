@@ -176,6 +176,8 @@ try:
                 style_dict['layout.title.font.family'] = value
             elif key == 'title.text':
                 style_dict['layout.title.text'] = value
+            elif key == 'overall.title':
+                style_dict['layout.title.text'] = value
             elif key == 'title.font.size':
                 style_dict['layout.title.font.size'] = value
             elif key == 'theme':
