@@ -128,6 +128,7 @@ try:
         font_size_keys = ['layout.font.size', 'layout.legend.font.size']
 
         style_dict = {
+            'theme':'seaborn',
             'layout.plot_bgcolor': 'rgba(0, 0, 0, 0)',
             'layout.font.family': font,
             'layout.font.size': font_size,
@@ -173,6 +174,8 @@ try:
                 style_dict['layout.title'] = value
             elif key == 'title.font.family':
                 style_dict['layout.title.font.family'] = value
+            elif key == 'title.text':
+                style_dict['layout.title.text'] = value
             elif key == 'title.font.size':
                 style_dict['layout.title.font.size'] = value
             elif key == 'theme':
