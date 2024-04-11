@@ -221,5 +221,14 @@ main inspirations
             )
             self.clear_screen()
             return some_figure_obj
+        def __getitem__(self, key):return None if key not in self else self.kwargs[key]
+        def __setitem__(self, key, value):self.kwargs[key]=value
+        def __delitem__(self, key):del self.kwargs[key]
+        def __iter__(self):return iter(self.kwargs.values())
+        def __reversed__(self):return reversed(self.kwargs.values())
+        def __contains__(self, item):return item in self.kwargs.keys()
+        def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.kwargs.items() if key_filter(x)]
+        def keys(self, key_filter=lambda x:True):return [x for x in self.kwargs.keys() if key_filter(x)]
+        def values(self, key_filter=lambda x:True):return [self[x] for x in self.kwargs.keys() if key_filter(x)]
 except:pass
 
