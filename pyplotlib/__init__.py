@@ -120,7 +120,7 @@ try:
     def plt_default(default_theme="seaborn"):
         pio.templates.default = default_theme
 
-    def plt_style(**kwargs):
+    def plt_style(no_theme=False, **kwargs):
         font = "Times New Roman"
         font_keys = ['layout.font.family', 'layout.legend.font.family']
 
@@ -157,7 +157,12 @@ try:
             'layout.title.yanchor': 'top',
         }
 
-        plt_default()
+        if no_theme:
+            del style_dict['theme']
+
+        if "theme" in style_dict:
+            plt_default(style_dict['theme'])
+
         for key,value in kwargs.items():
             key=key.replace('_','.')
             if key == 'font':
@@ -181,7 +186,7 @@ try:
             elif key == 'title.font.size':
                 style_dict['layout.title.font.size'] = value
             elif key == 'theme':
-                pio.templates.default = value
+                plt_default(value)
             else:
                 style_dict[key] = value
         return style_dict
