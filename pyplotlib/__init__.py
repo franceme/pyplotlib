@@ -22,7 +22,7 @@ class styleapplicator(ABC):
         self.DiscretePatterns = common_defaults['DiscretePatterns']
     def assign_discrete_colormap(self, *keys):
         key_list = list(keys)
-        if len(key_list) > self.DiscreteColours:
+        if len(key_list) > len(self.DiscreteColours):
             raise Exception("There are too many keys, there are only {0} colours".format(len(self.DiscreteColours)))
         return {
             key:self.DiscreteColours[key_itr]
@@ -30,7 +30,7 @@ class styleapplicator(ABC):
         }
     def assign_discrete_patternmap(self, *keys):
         key_list = list(keys)
-        if len(key_list) > self.DiscretePatterns:
+        if len(key_list) > len(self.DiscretePatterns):
             raise Exception("There are too many keys, there are only {0} colours".format(len(self.DiscretePatterns)))
         return self.DiscretePatterns[:len(key_list)-1]
     def assign_extras(self, *extras, keys=[]):
