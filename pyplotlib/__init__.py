@@ -154,17 +154,14 @@ try:
         pio.templates.default = default_theme
 
     def plt_style(**kwargs):
-        font = common_defaults['Font']
         font_keys = ['layout.font.family', 'layout.legend.font.family']
-
-        font_size = common_defaults['Font_Size']
         font_size_keys = ['layout.font.size', 'layout.legend.font.size']
 
         style_dict = {
             'theme':'seaborn',
             'layout.plot_bgcolor': 'rgba(0, 0, 0, 0)',
-            'layout.font.family': font,
-            'layout.font.size': font_size,
+            'layout.font.family': common_defaults['Font'],
+            'layout.font.size': common_defaults['Font_Size'],
             'layout.xaxis.linecolor': 'black',
             'layout.xaxis.ticks': 'outside',
             'layout.xaxis.mirror': True,
@@ -178,8 +175,8 @@ try:
             'layout.showlegend': True,
             'layout.legend.bgcolor': 'rgba(0, 0, 0, 0)',
             'layout.legend.x': 1,
-            'layout.legend.font.family': font,
-            'layout.legend.font.size': font_size,
+            'layout.legend.font.family': common_defaults['Font'],
+            'layout.legend.font.size': common_defaults['Font_Size'],
             # Specialized:
             # 'layout.xaxis.range': (2.3, 2.5),
             'layout.yaxis.range': (0, +50),
