@@ -119,7 +119,7 @@ try:
         import plotly.io as pio
         pio.templates.default = default_theme
 
-    def plt_style(no_theme=False, **kwargs):
+    def plt_style(**kwargs):
         font = "Times New Roman"
         font_keys = ['layout.font.family', 'layout.legend.font.family']
 
@@ -159,6 +159,8 @@ try:
         if "theme" in style_dict:
             plt_default(style_dict['theme'])
             del style_dict['theme']
+        else:
+            plt_default()
 
         for key,value in kwargs.items():
             key=key.replace('_','.')
