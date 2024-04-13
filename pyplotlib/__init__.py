@@ -32,10 +32,18 @@ class styleapplicator(ABC):
         key_list = list(keys)
         if len(key_list) > self.DiscretePatterns:
             raise Exception("There are too many keys, there are only {0} colours".format(len(self.DiscretePatterns)))
-        return {
-            key:self.DiscretePatterns[key_itr]
-            for key_itr, key in enumerate(key_list)
-        }
+        return self.DiscretePatterns[:len(key_list)-1]
+    def assign_extras(self, *extras, keys=[]):
+        output = {}
+        extra_list = list(extras)
+        if len(extra_list)  == 0:
+            extra_list = ["patterns", "colours"]
+        for extra_item in extra_list:
+            if extra_item == "colours":
+                output['color_discrete_map'] = self.assign_discrete_colormap(*keys)
+            if extra_item == "patterns":
+                output['pattern_shape_sequence'] = self.assign_discrete_patternmap(*keys)
+        return output
     @staticmethod
     def clr():
         try:
