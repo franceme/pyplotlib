@@ -263,8 +263,17 @@ main inspirations
             import json
             return json.dumps(self.kwargs)
         @staticmethod
-        def from_json(self, json_string):
+        def from_json(json_string):
             import json
             return pltstyle(**json.loads(json_string))
+        def set_env(self):
+            import os,json
+            os.environ["base_style"] = self.to_json
+        @staticmethod
+        def from_env():
+            import os,json
+            if "base_style" not in os.environ:
+                pltstyle().set_env()
+            return pltstyle.from_json(os.environ["base_style"])
 except:pass
 
