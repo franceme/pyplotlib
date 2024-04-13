@@ -5,11 +5,37 @@ def flatten(column_header):
         return ' '.join([str(ch) for ch in column_header]).strip()
     return column_header
 
+common_defaults = {
+    'Font': 'Times New Roman',
+    'Font_Size':26,
+    'Font_Color':'black',
+    'DiscreteColours':['#f0f9e8', '#bae4bc', '#7bccc4', '#43a2ca', '#0868ac'],
+    'DiscretePatterns':['x', '.', '+', '/', '-', '|', '^'],
+}
+
 from abc import ABC, abstractmethod
 from copy import deepcopy as dc
 class styleapplicator(ABC):
     def __init__(self):
         super().__init__()
+        self.DiscreteColours = common_defaults['DiscreteColours']
+        self.DiscretePatterns = common_defaults['DiscretePatterns']
+    def assign_discrete_colormap(self, *keys):
+        key_list = list(keys)
+        if len(key_list) > self.DiscreteColours:
+            raise Exception("There are too many keys, there are only {0} colours".format(len(self.DiscreteColours)))
+        return {
+            key:self.DiscreteColours[key_itr]
+            for key_itr, key in enumerate(key_list)
+        }
+    def assign_discrete_patternmap(self, *keys):
+        key_list = list(keys)
+        if len(key_list) > self.DiscretePatterns:
+            raise Exception("There are too many keys, there are only {0} colours".format(len(self.DiscretePatterns)))
+        return {
+            key:self.DiscretePatterns[key_itr]
+            for key_itr, key in enumerate(key_list)
+        }
     @staticmethod
     def clr():
         try:
@@ -120,10 +146,10 @@ try:
         pio.templates.default = default_theme
 
     def plt_style(**kwargs):
-        font = "Times New Roman"
+        font = common_defaults['Font']
         font_keys = ['layout.font.family', 'layout.legend.font.family']
 
-        font_size = 26
+        font_size = common_defaults['Font_Size']
         font_size_keys = ['layout.font.size', 'layout.legend.font.size']
 
         style_dict = {
