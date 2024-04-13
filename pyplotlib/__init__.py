@@ -261,5 +261,13 @@ main inspirations
         def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.kwargs.items() if key_filter(x)]
         def keys(self, key_filter=lambda x:True):return [x for x in self.kwargs.keys() if key_filter(x)]
         def values(self, key_filter=lambda x:True):return [self[x] for x in self.kwargs.keys() if key_filter(x)]
+        @property
+        def to_json(self):
+            import json
+            return json.dumps(self.kwargs)
+        @staticmethod
+        def from_json(self, json_string):
+            import json
+            return pltstyle(**json.loads(json_string))
 except:pass
 
