@@ -252,7 +252,7 @@ main inspirations
             )
 
             #Changing some per-plot settings since they're traces & annotations
-            for key,value in kwargs.items():
+            for key,value in self.kwargs.items():
                 if key.startswith("subplot."):
                     settings = {}
                     if key == "subplot.title.font.size":
