@@ -257,9 +257,9 @@ main inspirations
                     settings = {}
                     if key == "subplot.title.font.size":
                         settings['size'] = value
-                    elif key == "subplot.title.font.color"
+                    elif key == "subplot.title.font.color":
                         settings['color'] = value
-                    elif key == "subplot.title.font.family"
+                    elif key == "subplot.title.font.family":
                         settings['family'] = value
                     
                     #Setting all of the titles, they're all annotations?
