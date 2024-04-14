@@ -313,10 +313,13 @@ main inspirations
             import os,json
             os.environ["base_style"] = self.to_json
         @staticmethod
-        def from_env():
+        def from_env(*args, **kwargs):
             import os,json
             if "base_style" not in os.environ:
                 pltstyle().set_env()
-            return pltstyle.from_json(os.environ["base_style"])
+            current = pltstyle.from_json(os.environ["base_style"])
+            for key,value in kwargs.items():
+                current[key] = value
+            return current
 except:pass
 
