@@ -215,7 +215,7 @@ try:
                 style_dict['layout.title.text'] = value
             elif key == 'title.font.size':
                 style_dict['layout.title.font.size'] = value
-            elif key.startswith('subplot.'):
+            elif key.startswith('subplot'):
                 pass
             else:
                 style_dict[key] = value
@@ -240,7 +240,8 @@ main inspirations
     class pltstyle(styleapplicator):
         def __init__(self, **kwargs):
             super().__init__()
-            self.kwargs = {key:value for key,value in kwargs.items()}
+            self.kwargs = {key:value for key,value in kwargs.items() if not key.startswith('subplot')}
+            self.subplot_kwargs = {key:value for key,value in kwargs.items() if key.startswith('subplot')}
         def __enter__(self):return self
         def __exit__(self,*args, **kwargs):pass
         def __call__(self, some_figure_obj):
@@ -252,15 +253,15 @@ main inspirations
             )
 
             #Changing some per-plot settings since they're traces & annotations
-            for key,value in self.kwargs.items():
-                if key.startswith("subplot."):
-                    settings = {}
-                    if key == "subplot.title.font.size":
-                        settings['size'] = value
-                    elif key == "subplot.title.font.color":
-                        settings['color'] = value
-                    elif key == "subplot.title.font.family":
-                        settings['family'] = value
+            for key,value in self.subplot_kwargs.items():
+                key=key.replace('_','.')
+                settings = {}
+                if key == "subplot.title.font.size":
+                    settings['size'] = value
+                elif key == "subplot.title.font.color":
+                    settings['color'] = value
+                elif key == "subplot.title.font.family":
+                    settings['family'] = value
                     
                     #Setting all of the titles, they're all annotations?
                     #https://github.com/plotly/plotly.py/issues/985
