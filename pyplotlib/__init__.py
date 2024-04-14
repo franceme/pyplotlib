@@ -215,6 +215,8 @@ try:
                 style_dict['layout.title.text'] = value
             elif key == 'title.font.size':
                 style_dict['layout.title.font.size'] = value
+            elif key.startswith('subplot.'):
+                pass
             else:
                 style_dict[key] = value
         return style_dict
@@ -242,11 +244,29 @@ main inspirations
         def __enter__(self):return self
         def __exit__(self,*args, **kwargs):pass
         def __call__(self, some_figure_obj):
+            #https://plotly.com/python/subplots/
             some_figure_obj.update(
                 plt_style(
                     **self.kwargs
                 )
             )
+
+            #Changing some per-plot settings since they're traces & annotations
+            for key,value in kwargs.items():
+                if key.startswith("subplot."):
+                    settings = {}
+                    if key == "subplot.title.font.size":
+                        settings['size'] = value
+                    elif key == "subplot.title.font.color"
+                        settings['color'] = value
+                    elif key == "subplot.title.font.family"
+                        settings['family'] = value
+                    
+                    #Setting all of the titles, they're all annotations?
+                    #https://github.com/plotly/plotly.py/issues/985
+                    #https://plotly.com/python/reference/layout/yaxis/
+                    for i in fig['layout']['annotations']:
+			            i['font'] = settings
             self.clear_screen()
             return some_figure_obj
         def __getitem__(self, key):return None if key not in self else self.kwargs[key]
