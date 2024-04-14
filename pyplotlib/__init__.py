@@ -242,8 +242,11 @@ main inspirations
             super().__init__()
             self.kwargs = {key:value for key,value in kwargs.items() if not key.startswith('subplot')}
             self.subplot_kwargs = {key:value for key,value in kwargs.items() if key.startswith('subplot')}
-        def __enter__(self):return self
-        def __exit__(self,*args, **kwargs):pass
+            self.set_env()
+        def __enter__(self):
+            return self.from_env()
+        def __exit__(self,*args, **kwargs):
+            self.set_env()
         def __call__(self, some_figure_obj):
             #https://plotly.com/python/subplots/
             some_figure_obj.update(
@@ -270,19 +273,38 @@ main inspirations
                         i['font'] = settings
             self.clear_screen()
             return some_figure_obj
-        def __getitem__(self, key):return None if key not in self else self.kwargs[key]
-        def __setitem__(self, key, value):self.kwargs[key]=value
-        def __delitem__(self, key):del self.kwargs[key]
-        def __iter__(self):return iter(self.kwargs.values())
-        def __reversed__(self):return reversed(self.kwargs.values())
-        def __contains__(self, item):return item in self.kwargs.keys()
-        def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.kwargs.items() if key_filter(x)]
-        def keys(self, key_filter=lambda x:True):return [x for x in self.kwargs.keys() if key_filter(x)]
-        def values(self, key_filter=lambda x:True):return [self[x] for x in self.kwargs.keys() if key_filter(x)]
+        def __getitem__(self, key):
+            if key in self.kwargs:
+                return self.kwargs[key]
+            elif key in self.subplot_kwargs:
+                return self.subplot_kwargs[key]
+            return None
+        def __setitem__(self, key, value):
+            if not key.startswith('subplot'):
+                self.kwargs[key]=value
+            else: #key.startswith('subplot'):
+                self.subplot_kwargs[key]=value
+        def __delitem__(self, key):
+            if key in self.kwargs:
+                del self.kwargs[key]
+            elif key in self.subplot_kwargs:
+                del self.subplot_kwargs[key]
+        @property
+        def total_items(self):
+            return {
+                **self.kwargs,
+                **self.subplot_kwargs,
+            }
+        def __iter__(self):return iter(self.total_items.values())
+        def __reversed__(self):return reversed(self.total_items.values())
+        def __contains__(self, item):return item in self.total_items.keys()
+        def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.total_items.items() if key_filter(x)]
+        def keys(self, key_filter=lambda x:True):return [x for x in self.total_items.keys() if key_filter(x)]
+        def values(self, key_filter=lambda x:True):return [self[x] for x in self.total_items.keys() if key_filter(x)]
         @property
         def to_json(self):
             import json
-            return json.dumps(self.kwargs)
+            return json.dumps(self.total_items)
         @staticmethod
         def from_json(json_string):
             import json
