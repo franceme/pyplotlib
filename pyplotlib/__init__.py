@@ -266,7 +266,7 @@ main inspirations
                     #https://github.com/plotly/plotly.py/issues/985
                     #https://plotly.com/python/reference/layout/yaxis/
                     for i in fig['layout']['annotations']:
-			            i['font'] = settings
+                        i['font'] = settings
             self.clear_screen()
             return some_figure_obj
         def __getitem__(self, key):return None if key not in self else self.kwargs[key]
