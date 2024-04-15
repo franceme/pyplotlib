@@ -161,18 +161,10 @@ class pltstyle(styleapplicator):
         key_filter_lambda = lambda x:True if self.majorplotkey == [] else lambda x:x in self.majorplotkey
         update_dicts = self.of(use_main_plot=True, key_filter=key_filter_lambda)
         #This seems to only work for plotly.go objects?
-        try:some_figure_obj.update(**update_dicts)
-        except Exception as e:
-            import os,sys
-            _, _, exc_tb = sys.exc_info();fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(":> Hit an unexpected error |some_figure_obj.update| {0} @ {1}:{2}".format(e, fname, exc_tb.tb_lineno))
-
-        #This seems to only work for plotly.express objects?
-        try:some_figure_obj.update_layout(**update_dicts)
-        except Exception as e:
-            import os,sys
-            _, _, exc_tb = sys.exc_info();fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(":> Hit an unexpected error |some_figure_obj.update_layout| {0} @ {1}:{2}".format(e, fname, exc_tb.tb_lineno))
+        mystring.update_fig(
+            figure=some_figure_obj,
+            **update_dicts
+        )
 
         #Changing some per-plot settings since they're traces & annotations
         for key,value in self.subplot_kwargs.items():
