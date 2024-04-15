@@ -159,9 +159,14 @@ class pltstyle(styleapplicator):
     def __call__(self, some_figure_obj):
         #https://plotly.com/python/subplots/
         key_filter_lambda = lambda x:True if self.majorplotkey == [] else lambda x:x in self.majorplotkey
-        some_figure_obj.update(
-            **self.of(use_main_plot=True, key_filter=key_filter_lambda)
-        )
+        update_dicts = self.of(use_main_plot=True, key_filter=key_filter_lambda)
+        #This seems to only work for plotly.go objects?
+        try:some_figure_obj.update(**update_dicts)
+        except:pass
+
+        #This seems to only work for plotly.express objects?
+        try:some_figure_obj.update_layout(**update_dicts)
+        except:pass
 
         #Changing some per-plot settings since they're traces & annotations
         for key,value in self.subplot_kwargs.items():
