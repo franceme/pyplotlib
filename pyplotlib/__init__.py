@@ -211,11 +211,11 @@ class pltstyle(styleapplicator):
                 **self.kwargs,
                 **self.subplot_kwargs,
             }
-            return {key_fix(x):y for x,y in total_items.items() if key_filter(x)}
+            return {self.self_key_fix(x):y for x,y in total_items.items() if key_filter(x)}
         elif use_main_plot:
-            return {key_fix(x):y for x,y in self.kwargs.items() if key_filter(x)}
+            return {self.self_key_fix(x):y for x,y in self.kwargs.items() if key_filter(x)}
         else:
-            return {key_fix(x):y for x,y in self.subplot_kwargs.items() if key_filter(x)}
+            return {self.self_key_fix(x):y for x,y in self.subplot_kwargs.items() if key_filter(x)}
     @property
     def to_json(self):
         import json
