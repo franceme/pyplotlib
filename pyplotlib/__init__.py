@@ -187,8 +187,13 @@ class pltstyle(styleapplicator):
                 #Setting all of the titles, they're all annotations?
                 #https://github.com/plotly/plotly.py/issues/985
                 #https://plotly.com/python/reference/layout/yaxis/
-                for i in some_figure_obj['layout']['annotations']:
-                    i['font'] = settings
+                try:
+                    for i in some_figure_obj['layout']['annotations']:
+                        i['font'] = settings
+                except Exception as e:
+                    import os,sys
+                    _, _, exc_tb = sys.exc_info();fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                    print(":> Hit an unexpected error |some_figure_obj['layout']['annotations']| {0} @ {1}:{2}".format(e, fname, exc_tb.tb_lineno))
 
         self.clear_screen()
         return some_figure_obj
