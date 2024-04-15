@@ -196,27 +196,27 @@ class pltstyle(styleapplicator):
             del self.kwargs[key]
         elif key in self.subplot_kwargs:
             del self.subplot_kwargs[key]
-    @property
-    def total_items(self):
-        return {
-            **self.kwargs,
-            **self.subplot_kwargs,
-        }
-    def __iter__(self):return iter(self.total_items.values())
-    def __reversed__(self):return reversed(self.total_items.values())
-    def __contains__(self, item):return item in self.total_items.keys()
-    def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.total_items.items() if key_filter(x)]
-    def keys(self, key_filter=lambda x:True):return [x for x in self.total_items.keys() if key_filter(x)]
-    def values(self, key_filter=lambda x:True):return [self[x] for x in self.total_items.keys() if key_filter(x)]
+    def __iter__(self):return iter(self.of(use_main_plot=None).values())
+    def __reversed__(self):return reversed(self.of(use_main_plot=None).values())
+    def __contains__(self, item):return item in self.of(use_main_plot=None).keys()
+    def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.of(use_main_plot=None).items() if key_filter(x)]
+    def keys(self, key_filter=lambda x:True):return [x for x in self.of(use_main_plot=None).keys() if key_filter(x)]
+    def values(self, key_filter=lambda x:True):return [self[x] for x in self.of(use_main_plot=None).keys() if key_filter(x)]
     def of(self, use_main_plot=True, key_filter=lambda x:True):
-        if use_main_plot:
+        if use_main_plot is None:
+            total_items = {
+                **self.kwargs,
+                **self.subplot_kwargs,
+            }
+            return [x for x in total_items.keys() if key_filter(x)]
+        elif use_main_plot:
             return [x for x in self.kwargs.keys() if key_filter(x)]
         else:
             return [x for x in self.subplot_kwargs.keys() if key_filter(x)]
     @property
     def to_json(self):
         import json
-        return json.dumps(self.total_items)
+        return json.dumps(self.of(use_main_plot=None))
     @staticmethod
     def from_json(json_string):
         import json
