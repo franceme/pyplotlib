@@ -236,7 +236,7 @@ class pltstyle(styleapplicator):
             env_name = kwargs['env_name']
 
         if env_name not in os.environ:
-            pltstyle(env_name=env_name).set_env()
+            pltstyle(**kwargs).set_env()
 
         current = pltstyle.from_json(os.environ[env_name])
         for key,value in kwargs.items():
