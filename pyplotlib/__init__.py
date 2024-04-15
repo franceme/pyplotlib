@@ -183,12 +183,13 @@ class pltstyle(styleapplicator):
                 settings['color'] = value
             elif key == "subplot.title.font.family":
                 settings['family'] = value
-                
+
                 #Setting all of the titles, they're all annotations?
                 #https://github.com/plotly/plotly.py/issues/985
                 #https://plotly.com/python/reference/layout/yaxis/
                 for i in some_figure_obj['layout']['annotations']:
                     i['font'] = settings
+
         self.clear_screen()
         return some_figure_obj
     def __getitem__(self, key):
