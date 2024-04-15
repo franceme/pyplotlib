@@ -143,8 +143,11 @@ class pltstyle(styleapplicator):
     def __init__(self, **kwargs):
         super().__init__()
         total_items = plt_style(**kwargs)
-        self.kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot')}
-        self.subplot_kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if key.startswith('subplot')}
+        self.kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot') and key != 'majorplotkey'}
+        self.subplot_kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if key.startswith('subplot') and key != 'majorplotkey'}
+        self.majorplotkey = []
+        if "majorplotkey" in total_items:
+            self.majorplotkey = total_items['majorplotkey']
         self.set_env()
     def __enter__(self):return self.from_env()
     def __exit__(self,*args, **kwargs):self.set_env();pass
@@ -152,8 +155,9 @@ class pltstyle(styleapplicator):
     def key_fix(string):return string.replace('_','.')
     def __call__(self, some_figure_obj):
         #https://plotly.com/python/subplots/
+        key_filter_lambda = lambda x:True if self.majorplotkey == [] else lambda x:x in self.majorplotkey
         some_figure_obj.update(
-            **self.kwargs
+            **self.of(use_main_plot=True, key_filter=key_filter_lambda)
         )
 
         #Changing some per-plot settings since they're traces & annotations
@@ -204,6 +208,11 @@ class pltstyle(styleapplicator):
     def items(self, key_filter=lambda x:True):return [(x, y) for x,y in self.total_items.items() if key_filter(x)]
     def keys(self, key_filter=lambda x:True):return [x for x in self.total_items.keys() if key_filter(x)]
     def values(self, key_filter=lambda x:True):return [self[x] for x in self.total_items.keys() if key_filter(x)]
+    def of(self, use_main_plot=True, key_filter=lambda x:True):
+        if use_main_plot:
+            return [x for x in self.kwargs.keys() if key_filter(x)]
+        else:
+            return [x for x in self.subplot_kwargs.keys() if key_filter(x)]
     @property
     def to_json(self):
         import json
@@ -224,5 +233,3 @@ class pltstyle(styleapplicator):
         for key,value in kwargs.items():
             current[key] = value
         return current
-
-
