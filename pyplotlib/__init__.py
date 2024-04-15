@@ -153,7 +153,7 @@ class pltstyle(styleapplicator):
     def __enter__(self):return self.from_env()
     def __exit__(self,*args, **kwargs):self.set_env();pass
     @staticmethod
-    def key_fix(string, parent_plot=False):return string.replace('_','.') if not parent_plot else key.replace('.','_')
+    def key_fix(string, parent_plot=False):return string.replace('_','.') if parent_plot else key.replace('.','_')
     def self_key_fix(self, string):
         return pltstyle.key_fix(string, parent_plot=self.parent_plot)
     def __call__(self, some_figure_obj):
