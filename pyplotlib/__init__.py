@@ -143,17 +143,19 @@ class pltstyle(styleapplicator):
     def __init__(self, **kwargs):
         super().__init__()
         total_items = plt_style(**kwargs)
-        self.kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot') and key not in ['majorplotkey', 'env_name']}
-        self.subplot_kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if key.startswith('subplot') and key not in ['majorplotkey', 'env_name']}
-        self.majorplotkey = []
+        self.parent_plot = False if "parent_plot" not in total_items else total_items['parent_plot']
+        reserved_words = ['majorplotkey', 'env_name', 'majorplotkey', 'parent_plot']
+        self.kwargs = {self.self_key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot') and key not in []}
+        self.subplot_kwargs = {self.self_key_fix(key):value for key,value in total_items.items() if key.startswith('subplot') and key not in ['majorplotkey', 'env_name']}
         self.env_name = "base_style" if "env_name" not in total_items else total_items['env_name']
-        if "majorplotkey" in total_items:
-            self.majorplotkey = total_items['majorplotkey']
+        self.majorplotkey = [] if "majorplotkey" not in total_items else total_items['majorplotkey']
         self.set_env()
     def __enter__(self):return self.from_env()
     def __exit__(self,*args, **kwargs):self.set_env();pass
     @staticmethod
-    def key_fix(string):return string.replace('_','.')
+    def key_fix(string, parent_plot=False):return string.replace('_','.') if not parent_plot else key
+    def self_key_fix(self, string):
+        return pltstyle.key_fix(string, parent_plot=self.parent_plot)
     def __call__(self, some_figure_obj):
         #https://plotly.com/python/subplots/
         key_filter_lambda = lambda x:True if self.majorplotkey == [] else lambda x:x in self.majorplotkey
@@ -179,20 +181,20 @@ class pltstyle(styleapplicator):
         self.clear_screen()
         return some_figure_obj
     def __getitem__(self, key):
-        key=pltstyle.key_fix(key)
+        key=self.self_key_fix(key)
         if key in self.kwargs:
             return self.kwargs[key]
         elif key in self.subplot_kwargs:
             return self.subplot_kwargs[key]
         return None
     def __setitem__(self, key, value):
-        key=pltstyle.key_fix(key)
+        key=self.self_key_fix(key)
         if not key.startswith('subplot'):
             self.kwargs[key]=value
         else: #key.startswith('subplot'):
             self.subplot_kwargs[key]=value
     def __delitem__(self, key):
-        key=pltstyle.key_fix(key)
+        key=self.self_key_fix(key)
         if key in self.kwargs:
             del self.kwargs[key]
         elif key in self.subplot_kwargs:
