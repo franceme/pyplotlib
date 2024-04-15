@@ -153,7 +153,7 @@ class pltstyle(styleapplicator):
     def __enter__(self):return self.from_env()
     def __exit__(self,*args, **kwargs):self.set_env();pass
     @staticmethod
-    def key_fix(string, parent_plot=False):return string.replace('_','.') if not parent_plot else key
+    def key_fix(string, parent_plot=False):return string.replace('_','.') if not parent_plot else key.replace('.','_')
     def self_key_fix(self, string):
         return pltstyle.key_fix(string, parent_plot=self.parent_plot)
     def __call__(self, some_figure_obj):
@@ -211,11 +211,11 @@ class pltstyle(styleapplicator):
                 **self.kwargs,
                 **self.subplot_kwargs,
             }
-            return {x:y for x,y in total_items.items() if key_filter(x)}
+            return {key_fix(x):y for x,y in total_items.items() if key_filter(x)}
         elif use_main_plot:
-            return {x:y for x,y in self.kwargs.items() if key_filter(x)}
+            return {key_fix(x):y for x,y in self.kwargs.items() if key_filter(x)}
         else:
-            return {x:y for x,y in self.subplot_kwargs.items() if key_filter(x)}
+            return {key_fix(x):y for x,y in self.subplot_kwargs.items() if key_filter(x)}
     @property
     def to_json(self):
         import json
