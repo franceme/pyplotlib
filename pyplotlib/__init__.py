@@ -240,24 +240,25 @@ main inspirations
     class pltstyle(styleapplicator):
         def __init__(self, **kwargs):
             super().__init__()
-            self.kwargs = {key:value for key,value in kwargs.items() if not key.startswith('subplot')}
-            self.subplot_kwargs = {key:value for key,value in kwargs.items() if key.startswith('subplot')}
+            total_items = plt_style(**kwargs)
+            self.kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot')}
+            self.subplot_kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if key.startswith('subplot')}
             self.set_env()
         def __enter__(self):
             return self.from_env()
         def __exit__(self,*args, **kwargs):
             self.set_env()
+        @staticmethod
+        def key_fix(string):
+            return string.replace('_','.')
         def __call__(self, some_figure_obj):
             #https://plotly.com/python/subplots/
             some_figure_obj.update(
-                plt_style(
-                    **self.kwargs
-                )
+                **self.kwargs
             )
 
             #Changing some per-plot settings since they're traces & annotations
             for key,value in self.subplot_kwargs.items():
-                key=key.replace('_','.')
                 settings = {}
                 if key == "subplot.title.font.size":
                     settings['size'] = value
@@ -269,22 +270,25 @@ main inspirations
                     #Setting all of the titles, they're all annotations?
                     #https://github.com/plotly/plotly.py/issues/985
                     #https://plotly.com/python/reference/layout/yaxis/
-                    for i in fig['layout']['annotations']:
+                    for i in some_figure_obj['layout']['annotations']:
                         i['font'] = settings
             self.clear_screen()
             return some_figure_obj
         def __getitem__(self, key):
+            key=pltstyle.key_fix(key)
             if key in self.kwargs:
                 return self.kwargs[key]
             elif key in self.subplot_kwargs:
                 return self.subplot_kwargs[key]
             return None
         def __setitem__(self, key, value):
+            key=pltstyle.key_fix(key)
             if not key.startswith('subplot'):
                 self.kwargs[key]=value
             else: #key.startswith('subplot'):
                 self.subplot_kwargs[key]=value
         def __delitem__(self, key):
+            key=pltstyle.key_fix(key)
             if key in self.kwargs:
                 del self.kwargs[key]
             elif key in self.subplot_kwargs:
