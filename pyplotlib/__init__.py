@@ -143,9 +143,10 @@ class pltstyle(styleapplicator):
     def __init__(self, **kwargs):
         super().__init__()
         total_items = plt_style(**kwargs)
-        self.kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot') and key != 'majorplotkey'}
-        self.subplot_kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if key.startswith('subplot') and key != 'majorplotkey'}
+        self.kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot') and key not in ['majorplotkey', 'env_name']}
+        self.subplot_kwargs = {pltstyle.key_fix(key):value for key,value in total_items.items() if key.startswith('subplot') and key not in ['majorplotkey', 'env_name']}
         self.majorplotkey = []
+        self.env_name = "base_style" if "env_name" not in total_items else total_items['env_name']
         if "majorplotkey" in total_items:
             self.majorplotkey = total_items['majorplotkey']
         self.set_env()
@@ -223,13 +224,19 @@ class pltstyle(styleapplicator):
         return pltstyle(**json.loads(json_string))
     def set_env(self):
         import os,json
-        os.environ["base_style"] = self.to_json
+        os.environ[self.env_name] = self.to_json
     @staticmethod
     def from_env(*args, **kwargs):
         import os,json
-        if "base_style" not in os.environ:
+        if 'env_name' not in kwargs:
+            env_name = "base_style"
+        else:
+            env_name = kwargs['env_name']
+
+        if env_name not in os.environ:
             pltstyle().set_env()
-        current = pltstyle.from_json(os.environ["base_style"])
+
+        current = pltstyle.from_json(os.environ[env_name])
         for key,value in kwargs.items():
             current[key] = value
         return current
