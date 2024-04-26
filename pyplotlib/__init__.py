@@ -5,6 +5,44 @@ def flatten(column_header):
         return ' '.join([str(ch) for ch in column_header]).strip()
     return column_header
 
+
+def generate_subplots_positions(num_plots, max_rows=None, max_cols=None):
+	if max_rows is None and max_cols is None:
+		max_rows = int(num_plots ** 0.5)
+		max_cols = int(num_plots / max_rows) + (num_plots % max_rows > 0)
+	elif max_rows is None:
+		max_rows = int(num_plots / max_cols) + (num_plots % max_cols > 0)
+	elif max_cols is None:
+		max_cols = int(num_plots / max_rows) + (num_plots % max_rows > 0)
+
+	positions = []
+	for i in range(num_plots):
+		row = i // max_cols + 1
+		col = i % max_cols + 1
+		print(f"[{row}, {col}]")
+		positions += [(row,col)]
+
+	return {
+		"positions":positions,
+		"rows":max_rows,
+		"cols":max_cols,
+	}
+
+def update_fig(figure, **kwargs):
+	try:
+		try:figure.update(**kwargs)
+		except Exception as e:
+			import os,sys
+			_, _, exc_tb = sys.exc_info();fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+			print(":> Hit an unexpected error |figure.update| {0} @ {1}:{2}".format(e, fname, exc_tb.tb_lineno))
+
+		try:figure.update_layout(**kwargs)
+		except Exception as e:
+			import os,sys
+			_, _, exc_tb = sys.exc_info();fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+			print(":> Hit an unexpected error |figure.update_layout| {0} @ {1}:{2}".format(e, fname, exc_tb.tb_lineno))
+	except:pass
+
 common_defaults = {
     'Font': 'Times New Roman',
     'Font_Size':26,
@@ -65,7 +103,7 @@ class styleapplicator(ABC):
         pass
     @abstractmethod
     def __call__(self, some_figure_obj):
-        pass
+        pass            
 
 def plt_default(default_theme="seaborn"):
     import plotly.io as pio
@@ -251,3 +289,12 @@ class pltstyle(styleapplicator):
         for key,value in kwargs.items():
             current[key] = value
         return current
+    def set_font_sizes(self, figure, font_size=common_defaults['Font_Size']):
+        for key,value in dict(
+            title_font=dict(size=common_font_size),  # Title font size
+            font=dict(size=common_font_size),  # General font size for all text
+            xaxis=dict(title_font=dict(size=common_font_size), tickfont=dict(size=common_font_size)),  # X-axis title and tick font sizes
+            yaxis=dict(title_font=dict(size=common_font_size), tickfont=dict(size=common_font_size)),  # Y-axis title and tick font sizes
+            legend=dict(font=dict(size=common_font_size)),  # Legend font size
+        ).items()
+            update_fig(figure, **{key:value})
