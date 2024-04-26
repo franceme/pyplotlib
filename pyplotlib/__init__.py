@@ -308,5 +308,5 @@ class pltstyle(styleapplicator):
         ]
     @staticmethod
     def set_all_font_sizes(figure, font_size=common_defaults['Font_Size']):
-        for key in pltstyle.all_font_keys:
+        for key in pltstyle.all_font_keys():
             update_fig(figure, **{key:font_size})
