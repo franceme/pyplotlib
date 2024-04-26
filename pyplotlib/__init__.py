@@ -149,6 +149,9 @@ def plt_style(**kwargs):
     else:
         plt_default()
 
+    if "all_font_size" in style_dict:
+        del style_dict["all_font_size"]
+
     for key,value in kwargs.items():
         key=pltstyle.key_fix(key)
         if key == 'font':
@@ -181,6 +184,7 @@ class pltstyle(styleapplicator):
     def __init__(self, **kwargs):
         super().__init__()
         total_items = plt_style(**kwargs)
+        self.all_font_size = None if "all_font_size" not in total_items else total_items['all_font_size']
         self.parent_plot = False if "parent_plot" not in total_items else total_items['parent_plot']
         reserved_words = ['majorplotkey', 'env_name', 'majorplotkey', 'parent_plot']
         self.kwargs = {self.self_key_fix(key):value for key,value in total_items.items() if not key.startswith('subplot') and key not in []}
@@ -199,10 +203,12 @@ class pltstyle(styleapplicator):
         key_filter_lambda = lambda x:True if self.majorplotkey == [] else lambda x:x in self.majorplotkey
         update_dicts = self.of(use_main_plot=True, key_filter=key_filter_lambda)
         #This seems to only work for plotly.go objects?
-        mystring.update_fig(
+        update_fig(
             figure=some_figure_obj,
             **update_dicts
         )
+        if self.all_font_size:
+            self.set_all_font_sizes(figure=some_figure_obj, font_size=self.all_font_size)
 
         #Changing some per-plot settings since they're traces & annotations
         for key,value in self.subplot_kwargs.items():
@@ -289,12 +295,17 @@ class pltstyle(styleapplicator):
         for key,value in kwargs.items():
             current[key] = value
         return current
-    def set_font_sizes(self, figure, font_size=common_defaults['Font_Size']):
-        for key,value in dict(
-            title_font=dict(size=common_font_size),  # Title font size
-            font=dict(size=common_font_size),  # General font size for all text
-            xaxis=dict(title_font=dict(size=common_font_size), tickfont=dict(size=common_font_size)),  # X-axis title and tick font sizes
-            yaxis=dict(title_font=dict(size=common_font_size), tickfont=dict(size=common_font_size)),  # Y-axis title and tick font sizes
-            legend=dict(font=dict(size=common_font_size)),  # Legend font size
-        ).items()
-            update_fig(figure, **{key:value})
+    @staticmethod
+    def all_font_keys():
+        return [
+            'title_font.size.common_font_size',
+            'font.size.common_font_size',
+            'xaxis.title_font.size',
+            'xaxis.title_font.tickfont.size',
+            'yaxis.title_font.size',
+            'yaxis.title_font.tickfont.size',
+            'legend.font.size'
+        ]
+    def set_all_font_sizes(self, figure, font_size=common_defaults['Font_Size']):
+        for key in pltstyle.all_font_keys:
+            update_fig(figure, **{key:font_size})
