@@ -315,9 +315,9 @@ class pltstyle(styleapplicator):
 	@staticmethod
 	def wrap_args(figure, **kwargs):
 		for key,value in kwargs.items():
-            key=str(key)
+			key=str(key)
 			if update_fig(
 				figure,
 				**{key:value}
 			):
-                setattr(figure, "_"+key, value)
+				setattr(figure, "_"+key, value)
