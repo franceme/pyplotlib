@@ -295,18 +295,13 @@ class pltstyle(styleapplicator):
         for key,value in kwargs.items():
             current[key] = value
         return current
-    @staticmethod
-    def all_font_keys():
-        return [
-            'title_font.size.common_font_size',
-            'font.size.common_font_size',
-            'xaxis.title_font.size',
-            'xaxis.title_font.tickfont.size',
-            'yaxis.title_font.size',
-            'yaxis.title_font.tickfont.size',
-            'legend.font.size'
-        ]
+
     @staticmethod
     def set_all_font_sizes(figure, font_size=common_defaults['Font_Size']):
-        for key in pltstyle.all_font_keys():
-            update_fig(figure, **{key:font_size})
+        update_fig(figure,
+            title_font=dict(size=font_size),  # Title font size
+            font=dict(size=font_size),  # General font size for all text
+            xaxis=dict(title_font=dict(size=font_size), tickfont=dict(size=font_size)),  # X-axis title and tick font sizes
+            yaxis=dict(title_font=dict(size=font_size), tickfont=dict(size=font_size)),  # Y-axis title and tick font sizes
+            legend=dict(font=dict(size=font_size)),  # Legend font size
+        )
